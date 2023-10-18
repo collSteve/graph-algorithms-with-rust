@@ -98,7 +98,7 @@ pub mod Graph {
     }
 
     pub struct BaseGraph<TVertex, TEdge> {
-        nodes: Vec<TVertex>,
+        vertices: Vec<TVertex>,
         edges: Vec<TEdge>,
     }
 
@@ -140,7 +140,7 @@ pub mod Graph {
     impl<TData, TVertex: Vertex<TData>, TEdge: Edge> Graph<TVertex, TEdge, TData> for BaseGraph<TVertex, TEdge> {
 
         fn get_vertex_count(&self) -> i32 {
-            return self.nodes.len() as i32;
+            return self.vertices.len() as i32;
         }
 
         fn get_edge_count(&self) -> i32 {
@@ -157,24 +157,24 @@ pub mod Graph {
 
         fn new() -> Self {
             BaseGraph {
-                nodes: Vec::new(),
+                vertices: Vec::new(),
                 edges: Vec::new(),
             }
         }
 
         fn add_vertex(&mut self, id: VertexId, data: TData) -> Result<(), GraphError> {
-            let id_exist = self.nodes.iter().any(|n|n.get_id() == id);
+            let id_exist = self.vertices.iter().any(|n|n.get_id() == id);
 
             if id_exist {
                 return Err(GraphError::VertexIdAlreadyExist(id));
             }
-            self.nodes.push(TVertex::new(id, data));
+            self.vertices.push(TVertex::new(id, data));
             return Ok(());
         }
 
         fn add_edge(&mut self, id: EdgeId, source: VertexId, target: VertexId) -> Result<(), GraphError> {
-            let source_exist = self.nodes.iter().any(|n|n.get_id() == source);
-            let target_exist = self.nodes.iter().any(|n|n.get_id() == target);
+            let source_exist = self.vertices.iter().any(|n|n.get_id() == source);
+            let target_exist = self.vertices.iter().any(|n|n.get_id() == target);
 
             let id_exist = self.edges.iter().any(|n|n.get_id() == id);
             if id_exist {
@@ -194,7 +194,7 @@ pub mod Graph {
         }
 
         fn get_all_vertices(&self) -> &Vec<TVertex> {
-            return &self.nodes;
+            return &self.vertices;
         }
     }
 }
